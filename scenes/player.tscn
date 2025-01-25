@@ -1,0 +1,116 @@
+[gd_scene load_steps=9 format=3 uid="uid://8fmpafoadenp"]
+
+[ext_resource type="Script" path="res://scripts/components/movement_component.gd" id="1_npbjx"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_skgoq"]
+[ext_resource type="Script" path="res://scripts/components/character_controller_component.gd" id="2_j7ixd"]
+[ext_resource type="Texture2D" uid="uid://d0e775e2auffh" path="res://assets/player.png" id="3_7ancd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5tey0"]
+radius = 16.0312
+
+[sub_resource type="Animation" id="Animation_kxkfb"]
+resource_name = "run"
+length = 0.5333
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Left Leg:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667, 0.4, 0.533333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.261799, 0.0, -0.261799, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Right Leg:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667, 0.4, 0.533333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.261799, 0.0, -0.261799, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_75ltc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Left Leg:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Right Leg:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gknik"]
+_data = {
+"RESET": SubResource("Animation_75ltc"),
+"run": SubResource("Animation_kxkfb")
+}
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_skgoq")
+metadata/is_player = true
+metadata/in_cannon_range = false
+
+[node name="Movement Component" type="Node" parent="." node_paths=PackedStringArray("character_body_2d")]
+script = ExtResource("1_npbjx")
+character_body_2d = NodePath("..")
+move_speed = 120.0
+
+[node name="Character Controller Component" type="Node" parent="." node_paths=PackedStringArray("movement_component", "animation_player")]
+script = ExtResource("2_j7ixd")
+movement_component = NodePath("../Movement Component")
+animation_player = NodePath("../AnimationPlayer")
+move_left_input_name = &"move_left"
+move_right_input_name = &"move_right"
+move_up_input_name = &"move_up"
+move_down_input_name = &"move_down"
+run_animation_name = &"run"
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_5tey0")
+
+[node name="Body" type="Sprite2D" parent="."]
+texture = ExtResource("3_7ancd")
+region_enabled = true
+region_rect = Rect2(16, 16, 32, 32)
+
+[node name="Left Leg" type="Sprite2D" parent="."]
+position = Vector2(-8, 17)
+texture = ExtResource("3_7ancd")
+region_enabled = true
+region_rect = Rect2(68, 38, 6, 10)
+
+[node name="Right Leg" type="Sprite2D" parent="."]
+position = Vector2(8, 17)
+texture = ExtResource("3_7ancd")
+region_enabled = true
+region_rect = Rect2(85, 38, 6, 10)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_gknik")
+}

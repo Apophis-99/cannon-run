@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://djhdnmd3kw2pu"]
+
+[node name="Camera" type="Camera2D"]
+limit_smoothed = true
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+editor_draw_limits = true
+editor_draw_drag_margin = true

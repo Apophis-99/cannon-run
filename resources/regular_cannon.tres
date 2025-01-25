@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CannonData" load_steps=2 format=3 uid="uid://d1wm5qsbl61kw"]
+
+[ext_resource type="Script" path="res://scripts/resources/cannon_data.gd" id="1_l6dqj"]
+
+[resource]
+script = ExtResource("1_l6dqj")
+max_range = 300.0
+min_range = 100.0
+damage_spread = 50.0
+cooldown_time = 0.0
