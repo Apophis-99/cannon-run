@@ -2,11 +2,44 @@
 class_name Hitbox
 extends Area2D
 
-@export var collision_shape: Shape2D : 
-	set(shape):
-		collider.shape = shape
+enum Type {
+	General,
+	Player,
+	Enemy,
+	Cannon
+}
 
-@onready var collider: CollisionShape2D = $Collider
+signal damage_dealt(damage: float)
+signal damage_taken(damage: float)
 
-func _ready() -> void:
-	collider.shape = collision_shape
+@export var type: Type
+
+var _should_deal_damage: bool
+var _deal_damage_amount: float
+var _wait_time: float
+var _target_type: Type
+
+func _physics_process(delta: float) -> void:
+	_wait_time += delta
+	if _should_deal_damage and _wait_time > 0.1:
+		_deal_damage(_deal_damage_amount, _target_type)
+		_should_deal_damage = false
+		_deal_damage_amount = 0.0
+
+func deal_damage(damage: float, type: Type):
+	_should_deal_damage = true
+	_deal_damage_amount = damage
+	_target_type = type
+	_wait_time = 0.0
+
+func _deal_damage(damage: float, type: Type):
+	var count := 0
+	for hitbox in get_overlapping_areas():
+		if hitbox is Hitbox:
+			if hitbox.type == type:
+				hitbox.take_damage(damage)
+				count += 1
+	damage_dealt.emit(count * damage)
+
+func take_damage(damage: float):
+	damage_taken.emit(damage)

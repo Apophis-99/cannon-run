@@ -1,12 +1,43 @@
-[gd_scene load_steps=9 format=3 uid="uid://8fmpafoadenp"]
+[gd_scene load_steps=11 format=3 uid="uid://8fmpafoadenp"]
 
 [ext_resource type="Script" path="res://scripts/components/movement_component.gd" id="1_npbjx"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_skgoq"]
 [ext_resource type="Script" path="res://scripts/components/character_controller_component.gd" id="2_j7ixd"]
 [ext_resource type="Texture2D" uid="uid://d0e775e2auffh" path="res://assets/player.png" id="3_7ancd"]
+[ext_resource type="Script" path="res://scripts/hitbox.gd" id="5_j24ab"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5tey0"]
 radius = 16.0312
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_po85d"]
+radius = 35.1283
+
+[sub_resource type="Animation" id="Animation_75ltc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Left Leg:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Right Leg:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_kxkfb"]
 resource_name = "run"
@@ -37,33 +68,6 @@ tracks/1/keys = {
 "values": [0.0, 0.261799, 0.0, -0.261799, 0.0]
 }
 
-[sub_resource type="Animation" id="Animation_75ltc"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Left Leg:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Right Leg:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gknik"]
 _data = {
 "RESET": SubResource("Animation_75ltc"),
@@ -92,6 +96,13 @@ run_animation_name = &"run"
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_5tey0")
+
+[node name="Hitbox" type="Area2D" parent="."]
+script = ExtResource("5_j24ab")
+type = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_po85d")
 
 [node name="Body" type="Sprite2D" parent="."]
 texture = ExtResource("3_7ancd")

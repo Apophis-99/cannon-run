@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bksxmaqu0w85q"]
+[gd_scene load_steps=12 format=3 uid="uid://bksxmaqu0w85q"]
 
 [ext_resource type="Texture2D" uid="uid://dlbjqgp18gd12" path="res://assets/cannon.png" id="1_bne6a"]
 [ext_resource type="Script" path="res://scripts/cannon.gd" id="1_yfrcr"]
 [ext_resource type="Resource" uid="uid://d1wm5qsbl61kw" path="res://resources/regular_cannon.tres" id="2_l118y"]
+[ext_resource type="Script" path="res://scripts/hitbox.gd" id="3_3jeci"]
 [ext_resource type="Texture2D" uid="uid://c23d2j5vv4t6c" path="res://assets/target.png" id="4_alhxu"]
 [ext_resource type="PackedScene" uid="uid://qpkvh3yi7arp" path="res://scenes/hitbox.tscn" id="5_1bpl8"]
 
@@ -12,6 +13,8 @@ radius = 68.0074
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wvgb6"]
 size = Vector2(46.75, 31.5)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_3ipkr"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8guoj"]
 bg_color = Color(0.136826, 0.136826, 0.136826, 1)
 corner_radius_top_left = 6
@@ -19,14 +22,21 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
+[sub_resource type="SystemFont" id="SystemFont_2fxny"]
+font_names = PackedStringArray("Cascadia Mono")
+subpixel_positioning = 0
+multichannel_signed_distance_field = true
+
 [node name="Cannon" type="StaticBody2D"]
 physics_interpolation_mode = 1
 script = ExtResource("1_yfrcr")
 data = ExtResource("2_l118y")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Cannon Hitbox" type="Area2D" parent="."]
+script = ExtResource("3_3jeci")
+type = 2
 
-[node name="Collider" type="CollisionShape2D" parent="Hitbox"]
+[node name="Collider" type="CollisionShape2D" parent="Cannon Hitbox"]
 position = Vector2(8, 0)
 shape = SubResource("CircleShape2D_n01gc")
 
@@ -49,30 +59,16 @@ width = 2.0
 joint_mode = 2
 
 [node name="Target Hitbox" parent="." instance=ExtResource("5_1bpl8")]
+type = 0
+
+[node name="Target Hitbox Collider" type="CollisionShape2D" parent="Target Hitbox"]
+shape = SubResource("CircleShape2D_3ipkr")
 
 [node name="Key Indicator Container" type="Node2D" parent="."]
 visible = false
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Key Indicator Container"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -10.0
-offset_top = -10.0
-offset_right = 10.0
-offset_bottom = 10.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="SubViewport" type="SubViewport" parent="Key Indicator Container/SubViewportContainer"]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(20, 20)
-render_target_update_mode = 0
-
-[node name="Key Indicator Background" type="Panel" parent="Key Indicator Container/SubViewportContainer/SubViewport"]
+[node name="Key Indicator Background" type="Panel" parent="Key Indicator Container"]
+custom_minimum_size = Vector2(20, 20)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -80,17 +76,18 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8guoj")
 
-[node name="Key Indicator Label" type="Label" parent="Key Indicator Container/SubViewportContainer/SubViewport/Key Indicator Background"]
+[node name="Key Indicator Label" type="Label" parent="Key Indicator Container/Key Indicator Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 12
+theme_override_fonts/font = SubResource("SystemFont_2fxny")
+theme_override_font_sizes/font_size = 15
 text = "E"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
-[connection signal="body_exited" from="Hitbox" to="." method="_on_hitbox_body_exited"]
+[connection signal="body_entered" from="Cannon Hitbox" to="." method="_on_cannon_hitbox_body_entered"]
+[connection signal="body_exited" from="Cannon Hitbox" to="." method="_on_cannon_hitbox_body_exited"]
