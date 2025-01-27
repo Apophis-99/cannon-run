@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/components/movement_component.gd" id="1_npbjx"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_skgoq"]
 [ext_resource type="Script" path="res://scripts/components/character_controller_component.gd" id="2_j7ixd"]
-[ext_resource type="Texture2D" uid="uid://d0e775e2auffh" path="res://assets/player.png" id="3_7ancd"]
+[ext_resource type="Texture2D" uid="uid://d0e775e2auffh" path="res://assets/player/player.png" id="3_7ancd"]
 [ext_resource type="Script" path="res://scripts/hitbox.gd" id="5_j24ab"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5tey0"]
@@ -83,6 +83,8 @@ metadata/in_cannon_range = false
 script = ExtResource("1_npbjx")
 character_body_2d = NodePath("..")
 move_speed = 120.0
+dash_speed = 350.0
+dash_distance = 300.0
 
 [node name="Character Controller Component" type="Node" parent="." node_paths=PackedStringArray("movement_component", "animation_player")]
 script = ExtResource("2_j7ixd")
@@ -92,6 +94,7 @@ move_left_input_name = &"move_left"
 move_right_input_name = &"move_right"
 move_up_input_name = &"move_up"
 move_down_input_name = &"move_down"
+dash_input_name = &"dash"
 run_animation_name = &"run"
 
 [node name="Collider" type="CollisionShape2D" parent="."]

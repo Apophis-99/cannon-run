@@ -1,0 +1,119 @@
+[gd_scene load_steps=16 format=3 uid="uid://dphb1xrke5yoq"]
+
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="1_nuedw"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_unabc"]
+[ext_resource type="PackedScene" uid="uid://qpkvh3yi7arp" path="res://scenes/hitbox.tscn" id="2_tgnch"]
+[ext_resource type="Texture2D" uid="uid://bg7a4t1jtcjyj" path="res://assets/enemies/squiggle.png" id="3_v11d1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kty1j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sxw6r"]
+atlas = ExtResource("3_v11d1")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hhow6"]
+atlas = ExtResource("3_v11d1")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qeawh"]
+atlas = ExtResource("3_v11d1")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5q0q"]
+atlas = ExtResource("3_v11d1")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5tqkj"]
+atlas = ExtResource("3_v11d1")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y2a13"]
+atlas = ExtResource("3_v11d1")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jqjxx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sxw6r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hhow6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qeawh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5q0q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5tqkj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y2a13")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uxig3"]
+radius = 19.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8v16"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fx6sy"]
+bg_color = Color(0.864161, 0.12158, 0.0313776, 1)
+
+[node name="Squiggle" type="CharacterBody2D" node_paths=PackedStringArray("health_bar", "nav")]
+script = ExtResource("1_unabc")
+health_bar = NodePath("Health Bar")
+nav = NodePath("NavigationAgent2D")
+
+[node name="Health Component" type="Node" parent="." node_paths=PackedStringArray("hitbox")]
+script = ExtResource("1_nuedw")
+hitbox = NodePath("../Enemy Hitbox")
+health = 100.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_kty1j")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jqjxx")
+autoplay = "default"
+frame_progress = 0.494524
+
+[node name="Enemy Hitbox" parent="." instance=ExtResource("2_tgnch")]
+type = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy Hitbox"]
+shape = SubResource("CircleShape2D_uxig3")
+
+[node name="Health Bar" type="ProgressBar" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -20.0
+offset_right = 15.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_j8v16")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fx6sy")
+step = 1.0
+value = 100.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 40.0
+target_desired_distance = 40.0
+debug_enabled = true
+
+[connection signal="damage_taken" from="Health Component" to="." method="_on_health_component_damage_taken"]
+[connection signal="died" from="Health Component" to="." method="_on_health_component_died"]

@@ -7,19 +7,25 @@ extends StaticBody2D
 @onready var key_indicator_container: Node2D = $"Key Indicator Container"
 @onready var target_hitbox: Hitbox = $"Target Hitbox"
 @onready var target_hitbox_collider: CollisionShape2D = $"Target Hitbox/Target Hitbox Collider"
+@onready var cooldown_progress: ProgressBar = $"Cooldown Progress"
+
+@onready var health_component: HealthComponent = $"Health Component"
+@onready var health_bar: ProgressBar = $"Health Bar"
 
 var _player_in_hitbox: bool = false
 var _player: CharacterBody2D = null
 var _in_cannon: bool = false
 var _leaving_cannon: bool = false
 var _aim_point: Vector2
+var _cooldown_time: float
 
 func _on_cannon_hitbox_body_entered(body: Node2D) -> void:
 	if body.has_meta("is_player"):
 		_player_in_hitbox = true
 		_player = body
-		key_indicator_container.show()
-		key_indicator_container.global_rotation = 0
+		if _cooldown_time <= 0.0:
+			key_indicator_container.show()
+			key_indicator_container.global_rotation = 0
 
 func _on_cannon_hitbox_body_exited(body: Node2D) -> void:
 	if _in_cannon or _leaving_cannon:
@@ -28,12 +34,25 @@ func _on_cannon_hitbox_body_exited(body: Node2D) -> void:
 		_player_in_hitbox = false
 		key_indicator_container.hide()
 
-# If in cannon range and not already in cannon, press "enter_cannon" to set flag to true
-# If in cannon rotate cannon according to mouse position, when "fire_cannon" pressed launch player in direction of cannon
+func _ready() -> void:
+	health_component.health = data.health
+
 func _physics_process(delta: float) -> void:
+	_cooldown_time -= delta
+	if _cooldown_time <= 0.0:
+		_cooldown_time = 0.0
+		cooldown_progress.hide()
+		if _player_in_hitbox and not _in_cannon and not _leaving_cannon:
+			key_indicator_container.show()
+			key_indicator_container.global_rotation = 0
+	else:
+		cooldown_progress.show()
+		cooldown_progress.value = 100.0 - _cooldown_time / data.cooldown_time * 100.0
+	
 	if not _player_in_hitbox or not _player:
 		return
-	_check_enter_cannon()
+	if _cooldown_time <= 0.0:
+		_check_enter_cannon()
 	_handle_cannon(delta)
 	_handle_fire(delta)
 
@@ -82,6 +101,7 @@ func _handle_fire(delta: float):
 		
 	if _leaving_cannon:
 		_player.position = _player.position.move_toward(to_global(_aim_point), delta * 400)
+		_cooldown_time = data.cooldown_time
 		if (_player.position - to_global(_aim_point)).length() < 0.1:
 			_leaving_cannon = false
 		
@@ -95,9 +115,16 @@ func _handle_fire(delta: float):
 			_player.enable_legs()
 			target_sprite.hide()
 			_player_in_hitbox = false
-			target_hitbox.deal_damage(20.0, Hitbox.Type.Enemy)
+			target_hitbox.deal_damage(50.0, Hitbox.Type.Enemy)
 			queue_redraw()
 
 func _draw() -> void:
 	if _in_cannon or _leaving_cannon:
 		draw_circle(_aim_point, data.damage_spread, Color.RED, false, 1, true)
+
+
+func _on_health_component_damage_taken(_amount: float) -> void:
+	health_bar.value = health_component.health
+
+func _on_health_component_died() -> void:
+	print("Cannon died")

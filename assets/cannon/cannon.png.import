@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dg8sda8w7yc8b"
-path="res://.godot/imported/tileset_dirt_and_stone.png-673e40350559e1ebef66f932e50ffca4.ctex"
+uid="uid://dlbjqgp18gd12"
+path="res://.godot/imported/cannon.png-ef40ef4a9450dc137b7678a22ba929d6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dirt_and_stone/tileset_dirt_and_stone.png"
-dest_files=["res://.godot/imported/tileset_dirt_and_stone.png-673e40350559e1ebef66f932e50ffca4.ctex"]
+source_file="res://assets/cannon/cannon.png"
+dest_files=["res://.godot/imported/cannon.png-ef40ef4a9450dc137b7678a22ba929d6.ctex"]
 
 [params]
 

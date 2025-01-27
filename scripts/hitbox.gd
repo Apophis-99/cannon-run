@@ -26,17 +26,17 @@ func _physics_process(delta: float) -> void:
 		_should_deal_damage = false
 		_deal_damage_amount = 0.0
 
-func deal_damage(damage: float, type: Type):
+func deal_damage(damage: float, hitbox_type: Type):
 	_should_deal_damage = true
 	_deal_damage_amount = damage
-	_target_type = type
+	_target_type = hitbox_type
 	_wait_time = 0.0
 
-func _deal_damage(damage: float, type: Type):
+func _deal_damage(damage: float, hitbox_type: Type):
 	var count := 0
 	for hitbox in get_overlapping_areas():
 		if hitbox is Hitbox:
-			if hitbox.type == type:
+			if hitbox.type == hitbox_type:
 				hitbox.take_damage(damage)
 				count += 1
 	damage_dealt.emit(count * damage)

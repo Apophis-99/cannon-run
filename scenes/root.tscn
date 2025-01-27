@@ -1,28 +1,24 @@
 [gd_scene load_steps=5 format=3 uid="uid://jmbdiniuqp6j"]
 
+[ext_resource type="PackedScene" uid="uid://dobjtgahkwr5b" path="res://scenes/arena.tscn" id="1_ht1fe"]
 [ext_resource type="PackedScene" uid="uid://djhdnmd3kw2pu" path="res://scenes/camera.tscn" id="1_p8qwu"]
 [ext_resource type="PackedScene" uid="uid://8fmpafoadenp" path="res://scenes/player.tscn" id="1_y1tl3"]
 [ext_resource type="PackedScene" uid="uid://bksxmaqu0w85q" path="res://scenes/cannon.tscn" id="2_wpnmx"]
-[ext_resource type="PackedScene" uid="uid://dphb1xrke5yoq" path="res://scenes/enemy_1.tscn" id="4_ijwbh"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Root" type="Node2D"]
+
+[node name="Arena" parent="." instance=ExtResource("1_ht1fe")]
 
 [node name="Camera" parent="." instance=ExtResource("1_p8qwu")]
 zoom = Vector2(2, 2)
 
-[node name="Player" parent="." instance=ExtResource("1_y1tl3")]
-position = Vector2(-45, -42)
+[node name="Player" parent="." groups=["player"] instance=ExtResource("1_y1tl3")]
+position = Vector2(-29, -53)
 
-[node name="Cannon" parent="." instance=ExtResource("2_wpnmx")]
+[node name="Cannon" parent="." groups=["cannons"] instance=ExtResource("2_wpnmx")]
 position = Vector2(130, -11)
 rotation = -0.785398
 
-[node name="Cannon2" parent="." instance=ExtResource("2_wpnmx")]
+[node name="Cannon2" parent="." groups=["cannons"] instance=ExtResource("2_wpnmx")]
 position = Vector2(-221, -84)
 rotation = 1.25664
-
-[node name="Enemy1" parent="." instance=ExtResource("4_ijwbh")]
-position = Vector2(56, -73)
-
-[node name="Enemy2" parent="." instance=ExtResource("4_ijwbh")]
-position = Vector2(-114, 8)

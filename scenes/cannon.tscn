@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://bksxmaqu0w85q"]
+[gd_scene load_steps=14 format=3 uid="uid://bksxmaqu0w85q"]
 
-[ext_resource type="Texture2D" uid="uid://dlbjqgp18gd12" path="res://assets/cannon.png" id="1_bne6a"]
+[ext_resource type="Texture2D" uid="uid://dlbjqgp18gd12" path="res://assets/cannon/cannon.png" id="1_bne6a"]
 [ext_resource type="Script" path="res://scripts/cannon.gd" id="1_yfrcr"]
 [ext_resource type="Resource" uid="uid://d1wm5qsbl61kw" path="res://resources/regular_cannon.tres" id="2_l118y"]
 [ext_resource type="Script" path="res://scripts/hitbox.gd" id="3_3jeci"]
-[ext_resource type="Texture2D" uid="uid://c23d2j5vv4t6c" path="res://assets/target.png" id="4_alhxu"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="3_xr0ca"]
+[ext_resource type="Texture2D" uid="uid://c23d2j5vv4t6c" path="res://assets/cannon/target.png" id="4_alhxu"]
 [ext_resource type="PackedScene" uid="uid://qpkvh3yi7arp" path="res://scenes/hitbox.tscn" id="5_1bpl8"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n01gc"]
@@ -27,10 +28,16 @@ font_names = PackedStringArray("Cascadia Mono")
 subpixel_positioning = 0
 multichannel_signed_distance_field = true
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i61h6"]
+bg_color = Color(0.989424, 0.22269, 0.129026, 1)
+
 [node name="Cannon" type="StaticBody2D"]
 physics_interpolation_mode = 1
 script = ExtResource("1_yfrcr")
 data = ExtResource("2_l118y")
+
+[node name="Health Component" type="Node" parent="."]
+script = ExtResource("3_xr0ca")
 
 [node name="Cannon Hitbox" type="Area2D" parent="."]
 script = ExtResource("3_3jeci")
@@ -59,7 +66,6 @@ width = 2.0
 joint_mode = 2
 
 [node name="Target Hitbox" parent="." instance=ExtResource("5_1bpl8")]
-type = 0
 
 [node name="Target Hitbox Collider" type="CollisionShape2D" parent="Target Hitbox"]
 shape = SubResource("CircleShape2D_3ipkr")
@@ -89,5 +95,23 @@ text = "E"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Cooldown Progress" type="ProgressBar" parent="."]
+offset_left = -22.0
+offset_top = 23.0
+offset_right = 22.0
+offset_bottom = 29.0
+show_percentage = false
+
+[node name="Health Bar" type="ProgressBar" parent="."]
+visible = false
+offset_left = -22.0
+offset_top = -29.0
+offset_right = 22.0
+offset_bottom = -23.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_i61h6")
+show_percentage = false
+
+[connection signal="damage_taken" from="Health Component" to="." method="_on_health_component_damage_taken"]
+[connection signal="died" from="Health Component" to="." method="_on_health_component_died"]
 [connection signal="body_entered" from="Cannon Hitbox" to="." method="_on_cannon_hitbox_body_entered"]
 [connection signal="body_exited" from="Cannon Hitbox" to="." method="_on_cannon_hitbox_body_exited"]

@@ -9,13 +9,18 @@ extends Node
 @export var move_right_input_name: StringName
 @export var move_up_input_name: StringName
 @export var move_down_input_name: StringName
+@export var dash_input_name: StringName
 
 @export_category("Animations")
 @export var run_animation_name: StringName
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if not movement_component:
 		return
+	
+	if Input.is_action_just_pressed(dash_input_name):
+		movement_component.dash()
+	
 	var horiz := Input.get_axis(move_left_input_name, move_right_input_name)
 	var vert := Input.get_axis(move_up_input_name, move_down_input_name)
 	movement_component.move(horiz, vert)
