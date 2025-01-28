@@ -36,8 +36,10 @@ physics_interpolation_mode = 1
 script = ExtResource("1_yfrcr")
 data = ExtResource("2_l118y")
 
-[node name="Health Component" type="Node" parent="."]
+[node name="Health Component" type="Node" parent="." node_paths=PackedStringArray("hitbox")]
 script = ExtResource("3_xr0ca")
+hitbox = NodePath("../Cannon Hitbox")
+health = 100.0
 
 [node name="Cannon Hitbox" type="Area2D" parent="."]
 script = ExtResource("3_3jeci")
@@ -103,13 +105,15 @@ offset_bottom = 29.0
 show_percentage = false
 
 [node name="Health Bar" type="ProgressBar" parent="."]
-visible = false
 offset_left = -22.0
 offset_top = -29.0
 offset_right = 22.0
 offset_bottom = -23.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_i61h6")
 show_percentage = false
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+vertices = PackedVector2Array(28, -16, 28, 16, -20, 16, -20, -16, 28, -16)
 
 [connection signal="damage_taken" from="Health Component" to="." method="_on_health_component_damage_taken"]
 [connection signal="died" from="Health Component" to="." method="_on_health_component_died"]

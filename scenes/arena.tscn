@@ -309,7 +309,7 @@ sources/0 = SubResource("TileSetAtlasSource_15nmj")
 
 [node name="Arena" type="Node2D" node_paths=PackedStringArray("enemy_spawn_points")]
 script = ExtResource("1_nehdv")
-enemy_spawn_points = [NodePath("Enemy Spawn Points/Marker2D"), NodePath("Enemy Spawn Points/Marker2D2"), NodePath("Enemy Spawn Points/Marker2D3"), NodePath("Enemy Spawn Points/Marker2D4")]
+enemy_spawn_points = [NodePath("Enemy Spawn Points/Marker2D"), NodePath("Enemy Spawn Points/Marker2D2"), NodePath("Enemy Spawn Points/Marker2D3"), NodePath("Enemy Spawn Points/Marker2D4"), NodePath("Enemy Spawn Points/Marker2D5"), NodePath("Enemy Spawn Points/Marker2D6"), NodePath("Enemy Spawn Points/Marker2D7"), NodePath("Enemy Spawn Points/Marker2D8"), NodePath("Enemy Spawn Points/Marker2D9"), NodePath("Enemy Spawn Points/Marker2D10"), NodePath("Enemy Spawn Points/Marker2D11"), NodePath("Enemy Spawn Points/Marker2D12")]
 
 [node name="Navigation Region" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_bsbj4")
@@ -337,6 +337,30 @@ position = Vector2(-325, 256)
 
 [node name="Marker2D4" type="Marker2D" parent="Enemy Spawn Points"]
 position = Vector2(257, 258)
+
+[node name="Marker2D5" type="Marker2D" parent="Enemy Spawn Points"]
+position = Vector2(-198, 253)
+
+[node name="Marker2D6" type="Marker2D" parent="Enemy Spawn Points"]
+position = Vector2(66, 258)
+
+[node name="Marker2D7" type="Marker2D" parent="Enemy Spawn Points"]
+position = Vector2(254, 103)
+
+[node name="Marker2D8" type="Marker2D" parent="Enemy Spawn Points"]
+position = Vector2(259, -83)
+
+[node name="Marker2D9" type="Marker2D" parent="Enemy Spawn Points"]
+position = Vector2(46, -269)
+
+[node name="Marker2D10" type="Marker2D" parent="Enemy Spawn Points"]
+position = Vector2(-186, -273)
+
+[node name="Marker2D11" type="Marker2D" parent="Enemy Spawn Points"]
+position = Vector2(-324, -86)
+
+[node name="Marker2D12" type="Marker2D" parent="Enemy Spawn Points"]
+position = Vector2(-319, 87)
 
 [node name="Overlay" type="CanvasLayer" parent="."]
 

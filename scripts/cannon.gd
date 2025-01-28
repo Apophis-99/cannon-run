@@ -8,6 +8,7 @@ extends StaticBody2D
 @onready var target_hitbox: Hitbox = $"Target Hitbox"
 @onready var target_hitbox_collider: CollisionShape2D = $"Target Hitbox/Target Hitbox Collider"
 @onready var cooldown_progress: ProgressBar = $"Cooldown Progress"
+@onready var cannon_hitbox: Hitbox = $"Cannon Hitbox"
 
 @onready var health_component: HealthComponent = $"Health Component"
 @onready var health_bar: ProgressBar = $"Health Bar"
@@ -65,6 +66,7 @@ func _check_enter_cannon():
 		target_sprite.show()
 		key_indicator_container.hide()
 		target_hitbox.hide()
+		cannon_hitbox.stun(Hitbox.Type.Enemy)
 
 func _handle_cannon(delta: float):
 	if not _in_cannon:

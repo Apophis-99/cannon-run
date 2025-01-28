@@ -6,6 +6,12 @@ extends CharacterBody2D
 @export var health_bar: ProgressBar
 @export var nav: NavigationAgent2D
 
+@onready var enemy_hitbox: Hitbox = $"Enemy Hitbox"
+
+var _stunned: bool
+var _stun_time: float
+var _stun_dir: Vector2
+
 func _ready() -> void:
 	set_physics_process(false)
 	call_deferred("physics_deffered")
@@ -15,6 +21,18 @@ func physics_deffered() -> void:
 	set_physics_process(true)
 
 func _physics_process(delta: float) -> void:
+	if _stunned:
+		_stun_time += delta
+		#if _stun_time <= 0.2:
+			#velocity = _stun_dir * 50.0
+		#else:
+			#velocity = Vector2(0.0, 0.0)
+		if _stun_time >= 1.4:
+			_stunned = false
+			velocity = Vector2(0.0, 0.0)
+		move_and_slide()
+		return
+	
 	var target = position
 	if target_player:
 		target = get_player_position()
@@ -27,6 +45,7 @@ func _physics_process(delta: float) -> void:
 	
 	var dist = position.distance_to(target)
 	if dist <= attack_distance:
+		enemy_hitbox.deal_damage(10.0, Hitbox.Type.Cannon if target_cannon else Hitbox.Type.Player)
 		return
 	
 	velocity = velocity.lerp(direction * 100, 7 * delta)
@@ -65,3 +84,12 @@ func get_closest_cannon_position() -> Vector2:
 			closest_dist = dist
 			closest_position = cannon.position
 	return closest_position
+
+func _on_enemy_hitbox_stunned(hitbox: Hitbox) -> void:
+	var dir = hitbox.position.direction_to(self.position).normalized()
+	_stun_dir = dir
+	_stunned = true
+	_stun_time = 0.0
+	var tween = create_tween()
+	tween.tween_property(self, "velocity", dir * 100.0, 0.2)
+	tween.tween_callback(func(): velocity = Vector2(0.0, 0.0))

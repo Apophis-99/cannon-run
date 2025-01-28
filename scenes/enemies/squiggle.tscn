@@ -117,3 +117,4 @@ debug_enabled = true
 
 [connection signal="damage_taken" from="Health Component" to="." method="_on_health_component_damage_taken"]
 [connection signal="died" from="Health Component" to="." method="_on_health_component_died"]
+[connection signal="stunned" from="Enemy Hitbox" to="." method="_on_enemy_hitbox_stunned"]

@@ -13,12 +13,12 @@
 zoom = Vector2(2, 2)
 
 [node name="Player" parent="." groups=["player"] instance=ExtResource("1_y1tl3")]
-position = Vector2(-29, -53)
+position = Vector2(-32, -16)
 
 [node name="Cannon" parent="." groups=["cannons"] instance=ExtResource("2_wpnmx")]
-position = Vector2(130, -11)
+position = Vector2(81, -119)
 rotation = -0.785398
 
 [node name="Cannon2" parent="." groups=["cannons"] instance=ExtResource("2_wpnmx")]
-position = Vector2(-221, -84)
+position = Vector2(-200, 72)
 rotation = 1.25664

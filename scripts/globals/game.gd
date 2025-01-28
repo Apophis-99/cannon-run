@@ -31,6 +31,8 @@ func end_game():
 	pass
 
 func spawn_next_wave():
+	if get_wave_enemy_count() > 0:
+		return
 	_current_wave += 1
 	var count := 5 * _current_wave
 	var difficulty: float = float(_max_waves) / float(_max_waves - _current_wave)
@@ -61,12 +63,15 @@ func _check_wave_over():
 		wave_ended.emit(_current_wave)
 
 func _spawn_wave(count: int, difficulty: WaveDifficulty):
+	var spawn_locations = _enemy_spawn_locations
 	for i in range(0, count):
 		var enemy = SQUIGGLE.instantiate()
-		enemy.add_to_group("enemies")
-		var loc = Vector2(0.0, 0.0)
-		if len(_enemy_spawn_locations) > 0:
-			loc = _enemy_spawn_locations[randi() % len(_enemy_spawn_locations)]
+		if len(spawn_locations) == 0:
+			return
+		var loc = spawn_locations[0]
+		spawn_locations.remove_at(0)
 		enemy.position = loc
-		enemy.target_player = true
+		enemy.target_cannon = true
+		enemy.attack_distance = 60.0
 		get_tree().current_scene.add_child(enemy)
+		enemy.add_to_group("enemies")

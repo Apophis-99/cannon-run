@@ -11,6 +11,7 @@ enum Type {
 
 signal damage_dealt(damage: float)
 signal damage_taken(damage: float)
+signal stunned(hitbox: Hitbox)
 
 @export var type: Type
 
@@ -40,6 +41,13 @@ func _deal_damage(damage: float, hitbox_type: Type):
 				hitbox.take_damage(damage)
 				count += 1
 	damage_dealt.emit(count * damage)
+	_should_deal_damage = false
 
 func take_damage(damage: float):
 	damage_taken.emit(damage)
+
+func stun(type: Type):
+	for hitbox in get_overlapping_areas():
+		if hitbox is Hitbox:
+			if hitbox.type == type:
+				hitbox.stunned.emit(self)
