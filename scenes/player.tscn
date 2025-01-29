@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://8fmpafoadenp"]
+[gd_scene load_steps=14 format=3 uid="uid://8fmpafoadenp"]
 
 [ext_resource type="Script" path="res://scripts/components/movement_component.gd" id="1_npbjx"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_skgoq"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2_auu7o"]
 [ext_resource type="Script" path="res://scripts/components/character_controller_component.gd" id="2_j7ixd"]
 [ext_resource type="Texture2D" uid="uid://d0e775e2auffh" path="res://assets/player/player.png" id="3_7ancd"]
 [ext_resource type="Script" path="res://scripts/hitbox.gd" id="5_j24ab"]
@@ -74,10 +75,21 @@ _data = {
 "run": SubResource("Animation_kxkfb")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1r23"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fnjdd"]
+bg_color = Color(0.384314, 1, 0.32549, 1)
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_skgoq")
 metadata/is_player = true
 metadata/in_cannon_range = false
+
+[node name="Health Component" type="Node" parent="." node_paths=PackedStringArray("hitbox")]
+script = ExtResource("2_auu7o")
+hitbox = NodePath("../Hitbox")
+health = 100.0
 
 [node name="Movement Component" type="Node" parent="." node_paths=PackedStringArray("character_body_2d")]
 script = ExtResource("1_npbjx")
@@ -101,6 +113,8 @@ run_animation_name = &"run"
 shape = SubResource("CircleShape2D_5tey0")
 
 [node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("5_j24ab")
 type = 1
 
@@ -128,3 +142,16 @@ region_rect = Rect2(85, 38, 6, 10)
 libraries = {
 "": SubResource("AnimationLibrary_gknik")
 }
+
+[node name="Health Bar" type="ProgressBar" parent="."]
+offset_left = -25.0
+offset_top = -23.0
+offset_right = 25.0
+offset_bottom = -19.0
+theme_override_styles/background = SubResource("StyleBoxFlat_y1r23")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fnjdd")
+value = 100.0
+show_percentage = false
+
+[connection signal="damage_taken" from="Health Component" to="." method="_on_health_component_damage_taken"]
+[connection signal="died" from="Health Component" to="." method="_on_health_component_died"]

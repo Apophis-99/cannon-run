@@ -11,6 +11,7 @@ extends CharacterBody2D
 var _stunned: bool
 var _stun_time: float
 var _stun_dir: Vector2
+var _attack_cooldown: float = 1000.0
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -21,12 +22,10 @@ func physics_deffered() -> void:
 	set_physics_process(true)
 
 func _physics_process(delta: float) -> void:
+	_attack_cooldown += delta
+	
 	if _stunned:
 		_stun_time += delta
-		#if _stun_time <= 0.2:
-			#velocity = _stun_dir * 50.0
-		#else:
-			#velocity = Vector2(0.0, 0.0)
 		if _stun_time >= 1.4:
 			_stunned = false
 			velocity = Vector2(0.0, 0.0)
@@ -38,6 +37,9 @@ func _physics_process(delta: float) -> void:
 		target = get_player_position()
 	elif target_cannon:
 		target = get_closest_cannon_position()
+	#if (target - position).length() > 300.0:
+		#nav.target_position = position
+	#else:
 	nav.target_position = target
 	
 	var direction = nav.get_next_path_position() - global_position
@@ -45,7 +47,9 @@ func _physics_process(delta: float) -> void:
 	
 	var dist = position.distance_to(target)
 	if dist <= attack_distance:
-		enemy_hitbox.deal_damage(10.0, Hitbox.Type.Cannon if target_cannon else Hitbox.Type.Player)
+		if _attack_cooldown > 3.0:
+			enemy_hitbox.deal_damage(10.0, Hitbox.Type.Cannon if target_cannon else Hitbox.Type.Player)
+			_attack_cooldown = 0.0
 		return
 	
 	velocity = velocity.lerp(direction * 100, 7 * delta)

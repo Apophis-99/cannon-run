@@ -71,7 +71,8 @@ func _spawn_wave(count: int, difficulty: WaveDifficulty):
 		var loc = spawn_locations[0]
 		spawn_locations.remove_at(0)
 		enemy.position = loc
-		enemy.target_cannon = true
+		enemy.target_player = i % 2 == 0
+		enemy.target_cannon = not enemy.target_player
 		enemy.attack_distance = 60.0
 		get_tree().current_scene.add_child(enemy)
 		enemy.add_to_group("enemies")

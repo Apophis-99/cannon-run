@@ -43,7 +43,7 @@ health = 100.0
 
 [node name="Cannon Hitbox" type="Area2D" parent="."]
 script = ExtResource("3_3jeci")
-type = 2
+type = 3
 
 [node name="Collider" type="CollisionShape2D" parent="Cannon Hitbox"]
 position = Vector2(8, 0)
@@ -113,7 +113,8 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_i61h6")
 show_percentage = false
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
-vertices = PackedVector2Array(28, -16, 28, 16, -20, 16, -20, -16, 28, -16)
+position = Vector2(4, 0)
+radius = 29.0
 
 [connection signal="damage_taken" from="Health Component" to="." method="_on_health_component_damage_taken"]
 [connection signal="died" from="Health Component" to="." method="_on_health_component_died"]

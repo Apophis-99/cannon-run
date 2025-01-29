@@ -35,6 +35,7 @@ func _on_cannon_hitbox_body_exited(body: Node2D) -> void:
 		_player_in_hitbox = false
 		key_indicator_container.hide()
 
+
 func _ready() -> void:
 	health_component.health = data.health
 
@@ -56,6 +57,7 @@ func _physics_process(delta: float) -> void:
 		_check_enter_cannon()
 	_handle_cannon(delta)
 	_handle_fire(delta)
+
 
 func _check_enter_cannon():
 	if Input.is_action_just_pressed("enter_cannon") and not _in_cannon:
@@ -100,12 +102,23 @@ func _handle_fire(delta: float):
 		_player.disable_legs()
 		_player.position = to_global(aim_line.points[0])
 		_player.show()
+		_player.process_mode = Node.PROCESS_MODE_INHERIT
+		_player.hitbox.collision_layer -= 1
+		_player.hitbox.collision_mask -= 1
+		_cooldown_time = data.cooldown_time
 		
 	if _leaving_cannon:
-		_player.position = _player.position.move_toward(to_global(_aim_point), delta * 400)
-		_cooldown_time = data.cooldown_time
-		if (_player.position - to_global(_aim_point)).length() < 0.1:
+		if _player.get_slide_collision_count() > 0:
 			_leaving_cannon = false
+		if _player.position.distance_to(to_global(_aim_point)) < 0.05:
+			_leaving_cannon = false
+		else:
+			_player.velocity = _player.position.direction_to(to_global(_aim_point)).normalized() * 400
+			_player.move_and_slide()
+			
+		#_player.position = _player.position.move_toward(to_global(_aim_point), delta * 400)
+		#if (_player.position - to_global(_aim_point)).length() < 0.1:
+			#_leaving_cannon = false
 		
 		if not _leaving_cannon:
 			target_hitbox.show()
@@ -113,20 +126,25 @@ func _handle_fire(delta: float):
 			var shape = CircleShape2D.new()
 			shape.radius = data.damage_spread
 			target_hitbox_collider.shape = shape
-			_player.process_mode = Node.PROCESS_MODE_INHERIT
+			_player.hitbox.collision_layer += 1
 			_player.enable_legs()
 			target_sprite.hide()
 			_player_in_hitbox = false
-			target_hitbox.deal_damage(50.0, Hitbox.Type.Enemy)
+			call_deferred("_deal_damage")
 			queue_redraw()
 
 func _draw() -> void:
 	if _in_cannon or _leaving_cannon:
 		draw_circle(_aim_point, data.damage_spread, Color.RED, false, 1, true)
 
+func _deal_damage():
+	target_hitbox.deal_damage(50.0, Hitbox.Type.Enemy)
 
 func _on_health_component_damage_taken(_amount: float) -> void:
 	health_bar.value = health_component.health
+	var tween = create_tween()
+	tween.tween_property(self, "modulate", Color.RED, 0.2)
+	tween.tween_property(self, "modulate", Color.WHITE, 0.2)
 
 func _on_health_component_died() -> void:
-	print("Cannon died")
+	queue_free()

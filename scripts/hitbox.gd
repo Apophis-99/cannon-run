@@ -26,12 +26,12 @@ func _physics_process(delta: float) -> void:
 		_deal_damage(_deal_damage_amount, _target_type)
 		_should_deal_damage = false
 		_deal_damage_amount = 0.0
+		_wait_time = 0.0
 
 func deal_damage(damage: float, hitbox_type: Type):
 	_should_deal_damage = true
 	_deal_damage_amount = damage
 	_target_type = hitbox_type
-	_wait_time = 0.0
 
 func _deal_damage(damage: float, hitbox_type: Type):
 	var count := 0
