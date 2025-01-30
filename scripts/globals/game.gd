@@ -20,6 +20,7 @@ var _enemy_spawn_locations: Array[Vector2] = []
 signal game_started
 signal wave_started(wave: int)
 signal wave_ended(wave: int)
+signal player_died
 
 
 ## ------------------------------------ Public Functions ------------------------------------ ##
@@ -73,6 +74,6 @@ func _spawn_wave(count: int, difficulty: WaveDifficulty):
 		enemy.position = loc
 		enemy.target_player = i % 2 == 0
 		enemy.target_cannon = not enemy.target_player
-		enemy.attack_distance = 60.0
+		enemy.attack_distance = 40.0
 		get_tree().current_scene.add_child(enemy)
 		enemy.add_to_group("enemies")

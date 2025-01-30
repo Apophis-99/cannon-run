@@ -314,6 +314,7 @@ script = ExtResource("1_nehdv")
 enemy_spawn_points = [NodePath("Enemy Spawn Points/Marker2D"), NodePath("Enemy Spawn Points/Marker2D2"), NodePath("Enemy Spawn Points/Marker2D3"), NodePath("Enemy Spawn Points/Marker2D4"), NodePath("Enemy Spawn Points/Marker2D5"), NodePath("Enemy Spawn Points/Marker2D6"), NodePath("Enemy Spawn Points/Marker2D7"), NodePath("Enemy Spawn Points/Marker2D8"), NodePath("Enemy Spawn Points/Marker2D9"), NodePath("Enemy Spawn Points/Marker2D10"), NodePath("Enemy Spawn Points/Marker2D11"), NodePath("Enemy Spawn Points/Marker2D12")]
 
 [node name="Navigation Region" type="NavigationRegion2D" parent="."]
+visible = false
 navigation_polygon = SubResource("NavigationPolygon_bsbj4")
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="Navigation Region"]
@@ -339,6 +340,7 @@ tile_map_data = PackedByteArray("AAARABoAAAAEAAEAAAARABkAAAAAAAEAAAARABgAAAAAAAE
 tile_set = SubResource("TileSet_0yugd")
 
 [node name="Enemy Spawn Points" type="Node2D" parent="."]
+visible = false
 
 [node name="Marker2D" type="Marker2D" parent="Enemy Spawn Points"]
 position = Vector2(-330, -281)
@@ -379,6 +381,7 @@ position = Vector2(-332, -85)
 [node name="Overlay" type="CanvasLayer" parent="."]
 
 [node name="Screen Container" type="Control" parent="Overlay"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -388,6 +391,15 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("3_eqjkc")
+
+[node name="Background" type="ColorRect" parent="Overlay/Screen Container"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
 
 [node name="Screen Padding" type="MarginContainer" parent="Overlay/Screen Container"]
 layout_mode = 1
@@ -401,6 +413,7 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 
 [node name="Wave Info" type="VBoxContainer" parent="Overlay/Screen Container/Screen Padding"]
+visible = false
 layout_mode = 2
 
 [node name="Wave Label" type="Label" parent="Overlay/Screen Container/Screen Padding/Wave Info"]
@@ -428,6 +441,7 @@ text = "Wave Started"
 horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="Overlay/Screen Container/Screen Padding"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0

@@ -103,30 +103,28 @@ func _handle_fire(delta: float):
 		_player.position = to_global(aim_line.points[0])
 		_player.show()
 		_player.process_mode = Node.PROCESS_MODE_INHERIT
-		_player.hitbox.collision_layer -= 1
-		_player.hitbox.collision_mask -= 1
+		_player.hitbox.collision_layer = 2
+		_player.hitbox.collision_mask = 2
 		_cooldown_time = data.cooldown_time
 		
 	if _leaving_cannon:
-		if _player.get_slide_collision_count() > 0:
-			_leaving_cannon = false
-		if _player.position.distance_to(to_global(_aim_point)) < 0.05:
+		if _player.position.distance_to(to_global(_aim_point)) < 2.0:
 			_leaving_cannon = false
 		else:
 			_player.velocity = _player.position.direction_to(to_global(_aim_point)).normalized() * 400
 			_player.move_and_slide()
-			
-		#_player.position = _player.position.move_toward(to_global(_aim_point), delta * 400)
-		#if (_player.position - to_global(_aim_point)).length() < 0.1:
-			#_leaving_cannon = false
+		
+		if _player.get_slide_collision_count() > 0 and _cooldown_time < data.cooldown_time:
+			_leaving_cannon = false
 		
 		if not _leaving_cannon:
 			target_hitbox.show()
-			target_hitbox.position = _aim_point
+			target_hitbox.position = to_local(_player.position)
 			var shape = CircleShape2D.new()
 			shape.radius = data.damage_spread
 			target_hitbox_collider.shape = shape
-			_player.hitbox.collision_layer += 1
+			_player.hitbox.collision_layer = 3
+			_player.hitbox.collision_mask = 3
 			_player.enable_legs()
 			target_sprite.hide()
 			_player_in_hitbox = false

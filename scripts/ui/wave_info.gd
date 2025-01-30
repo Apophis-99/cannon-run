@@ -1,5 +1,6 @@
 extends Control
 
+@onready var background: ColorRect = $Background
 @onready var wave_info: VBoxContainer = $"Screen Padding/Wave Info"
 @onready var wave_label: Label = $"Screen Padding/Wave Info/Wave Label"
 @onready var wave_progress: ProgressBar = $"Screen Padding/Wave Info/Wave Progress"
@@ -10,6 +11,7 @@ extends Control
 func _ready() -> void:
 	Game.wave_started.connect(_on_wave_started)
 	Game.wave_ended.connect(_on_wave_ended)
+	Game.player_died.connect(_on_player_death)
 
 func _physics_process(delta: float) -> void:
 	var enemies_remaining := Game.get_wave_enemy_count()
@@ -20,6 +22,7 @@ func _on_wave_started(wave_num: int) -> void:
 	wave_info.hide()
 	wave_notification_label.show()
 	wave_notification_label.text = "Wave " + str(wave_num) + " started"
+	wave_label.text = "Wave " + str(wave_num)
 	var tween = create_tween()
 	tween.tween_property(wave_notification_label, "modulate", Color.TRANSPARENT, 3.0)
 	tween.tween_callback(_wave_started_after_tween)
@@ -39,3 +42,10 @@ func _wave_started_after_tween():
 
 func _on_next_wave_pressed() -> void:
 	Game.spawn_next_wave()
+
+func _on_player_death() -> void:
+	get_tree().paused = true
+	wave_notification_label.text = "Game Over"
+	wave_notification_label.show()
+	create_tween().tween_property(background, "color", Color.RED, 3.0)
+	wave_info.hide()

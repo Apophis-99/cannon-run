@@ -112,7 +112,6 @@ metadata/_edit_use_anchors_ = true
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 path_desired_distance = 40.0
 target_desired_distance = 40.0
-debug_enabled = true
 
 [connection signal="damage_taken" from="Health Component" to="." method="_on_health_component_damage_taken"]
 [connection signal="died" from="Health Component" to="." method="_on_health_component_died"]
